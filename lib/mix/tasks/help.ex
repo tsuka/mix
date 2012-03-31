@@ -2,6 +2,8 @@ defmodule Mix.Tasks.Help do
   @behavior Mix.Task
 
   @doc """
+  Print help information for tasks.
+
   Arguments: task
   If given a task name, prints the documentation for that task.
   If no task name is given, prints the short form documentation
@@ -13,8 +15,12 @@ defmodule Mix.Tasks.Help do
       {module, short_docs(get_task_docs(module.__info__(:docs)))}
     end
     Enum.each(docs, fn({module, doc}) ->
+      task = Mix.Tasks.module_to_task(module)
       if doc do
-        IO.puts(Mix.Tasks.module_to_task(module) <> ": " <> doc)
+        IO.puts(task <> ": " <> doc)
+      else:
+        IO.puts(task <> ": " <> "run `mix help " <>
+                task <> "` to see documentation.")
       end
     end)
   end
