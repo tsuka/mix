@@ -52,6 +52,7 @@ defmodule Mix.Tasks.Help do
     end
   end
 
+  defp get_task_docs(nil), do: "No documentation."
   defp get_task_docs(docs) do
     task = Enum.find(docs, fn(x) ->
       case x do

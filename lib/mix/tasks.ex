@@ -8,12 +8,22 @@ defmodule Mix.Tasks do
   as their respective modules.
   """
   def list_tasks() do
-    Enum.reduce(:code.get_path(), [], fn(x, acc) ->
+    load_all_tasks
+    Enum.reduce(:code.all_loaded, [], fn({module, _}, acc) ->
+      if Regex.run(%r/Mix\.Tasks\..*/, atom_to_list(module)) do
+        acc ++ [module]
+      else:
+        acc
+      end
+    end)
+  end
+
+  defp load_all_tasks() do
+    Enum.each(:code.get_path, fn(x) ->
       files = File.wildcard(x ++ '/__MAIN__/Mix/Tasks/*.beam')
-      Enum.map(files, fn(x) ->
-        {:module, module} = get_module(:filename.rootname(File.basename(x)))
-        module
-      end) ++ acc
+      Enum.each(files, fn(x) ->
+        get_module(:filename.rootname(File.basename(x)))
+      end)
     end)
   end
 
@@ -26,7 +36,6 @@ defmodule Mix.Tasks do
   {:module, module} is returned.
   """
   def get_module(s) when is_list(s), do: get_module list_to_binary(s)
-  def get_module (<<s>>), do: get_module <<:string.to_upper(s)>>
   def get_module(<<s, tail|binary>>) do
     name = Module.concat(Mix.Tasks, <<:string.to_upper(s)>> <> tail)
     :code.ensure_loaded(name)

@@ -1,5 +1,6 @@
 defmodule Mix do
   def start(args // Code.argv) do
+    Mix.Mixfile.load()
     case args do
     match: [h]
       Mix.Tasks.run_task h
