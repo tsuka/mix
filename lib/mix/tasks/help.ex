@@ -4,10 +4,13 @@ defmodule Mix.Tasks.Help do
   @doc """
   Print help information for tasks.
 
-  Arguments: task
   If given a task name, prints the documentation for that task.
   If no task name is given, prints the short form documentation
   for all tasks.
+
+  Arguments:
+    task: Print the @doc documentation for this task.
+    none: Print the short form documentation for all tasks.
   """
   def run([]) do
     modules = Mix.Tasks.list_tasks
