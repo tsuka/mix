@@ -9,9 +9,9 @@ defmodule Mix.Tasks do
   """
   def list_tasks() do
     Enum.reduce(:code.get_path(), [], fn(x, acc) ->
-      files = :filelib.wildcard(x ++ '/__MAIN__/Mix/Tasks/*.beam')
+      files = File.wildcard(x ++ '/__MAIN__/Mix/Tasks/*.beam')
       Enum.map(files, fn(x) ->
-        {:module, module} = get_module(:filename.rootname(:filename.basename(x)))
+        {:module, module} = get_module(:filename.rootname(File.basename(x)))
         module
       end) ++ acc
     end)
