@@ -10,7 +10,8 @@ defmodule Mix.Tasks do
   def list_tasks() do
     load_all_tasks
     Enum.reduce(:code.all_loaded, [], fn({module, _}, acc) ->
-      if Regex.run(%r/Mix\.Tasks\..*/, atom_to_list(module)) do
+      proper = Regex.run(%r/Mix\.Tasks\..*/, atom_to_list(module))
+      if proper && is_task?(module) do
         acc ++ [module]
       else:
         acc
@@ -62,8 +63,24 @@ defmodule Mix.Tasks do
     to_lower(List.last(Regex.split(%r/\./, list_to_binary(atom_to_list(module)), 4)))
   end
 
+  @doc """
+  Takes a task as a string like "foo" or "foo.bar"
+  and capitalizes each segment to form a module name.
+  """
   def capitalize_task(s) do
     Enum.join(Enum.map(Regex.split(%r/\./, s), capitalize(&1)), ".")
+  end
+
+  @doc """
+  Find out if a module defines a :run function
+  of one argument. This indicates whether or not
+  it is a task as opposed to a module holding
+  other namespaced tasks.
+  """
+  def is_task?(module) do
+    Enum.find(module.module_info(:functions), fn({name, arity}) ->
+      name == :run && arity == 1
+    end)
   end
 
   defp capitalize(s) when is_list(s), do: capitalize list_to_binary(s)
