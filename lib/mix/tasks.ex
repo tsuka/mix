@@ -20,7 +20,7 @@ defmodule Mix.Tasks do
 
   defp load_all_tasks() do
     Enum.each(:code.get_path, fn(x) ->
-      files = File.wildcard(x ++ '/__MAIN__/Mix/Tasks/*.beam')
+      files = File.wildcard(x ++ '/__MAIN__/Mix/Tasks/**/*.beam')
       Enum.each(files, fn(x) ->
         get_module(:filename.rootname(File.basename(x)))
       end)
@@ -36,8 +36,8 @@ defmodule Mix.Tasks do
   {:module, module} is returned.
   """
   def get_module(s) when is_list(s), do: get_module list_to_binary(s)
-  def get_module(<<s, tail|binary>>) do
-    name = Module.concat(Mix.Tasks, <<:string.to_upper(s)>> <> tail)
+  def get_module(s) do
+    name = Module.concat(Mix.Tasks, capitalize_task(s))
     :code.ensure_loaded(name)
   end
 
@@ -59,11 +59,20 @@ defmodule Mix.Tasks do
   lower-cases the first letter, and returns the name.
   """
   def module_to_task(module) do
-    case List.last(Regex.split(%r/\./, list_to_binary(atom_to_list(module)))) do
-    match: <<s,t|binary>>
-      <<:string.to_lower(s)>> <> t
-    match: <<s>>
-      <<:string.to_lower(s)>>
-    end
+    to_lower(List.last(Regex.split(%r/\./, list_to_binary(atom_to_list(module)), 4)))
+  end
+
+  def capitalize_task(s) do
+    Enum.join(Enum.map(Regex.split(%r/\./, s), capitalize(&1)), ".")
+  end
+
+  defp capitalize(s) when is_list(s), do: capitalize list_to_binary(s)
+  defp capitalize(<<s>>), do: <<:string.to_upper(s)>>
+  defp capitalize(<<s, t|binary>>) do
+    <<:string.to_upper(s)>> <> t
+  end
+
+  defp to_lower(task) do
+    list_to_binary(:string.to_lower(binary_to_list task))
   end
 end
