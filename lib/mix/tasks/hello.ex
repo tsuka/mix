@@ -1,7 +1,6 @@
 defmodule Mix.Tasks.Hello do
   @behavior Mix.Task
-
-  @doc """
+  @moduledoc """
   This is short documentation, see.
 
   A test task.

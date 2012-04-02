@@ -1,7 +1,6 @@
 defmodule Mix.Tasks.Help do
   @behavior Mix.Task
-
-  @doc """
+  @moduledoc """
   Print help information for tasks.
 
   If given a task name, prints the documentation for that task.
@@ -15,7 +14,7 @@ defmodule Mix.Tasks.Help do
   def run([]) do
     modules = Mix.Tasks.list_tasks
     docs = lc module in modules do
-      {module, short_docs(get_task_docs(module.__info__(:docs)))}
+      {module, short_docs(module.__info__(:moduledoc))}
     end
     Enum.each(docs, fn({module, doc}) ->
       task = Mix.Tasks.module_to_task(module)
@@ -31,7 +30,7 @@ defmodule Mix.Tasks.Help do
   def run([task]) do
     case Mix.Tasks.get_module(task) do
     match: {:module, module}
-      docs = get_task_docs(module.__info__(:docs))
+      docs = module.__info__(:moduledoc)
       if docs do
         IO.puts docs
       else:
@@ -43,30 +42,13 @@ defmodule Mix.Tasks.Help do
   end
 
   defp short_docs(nil), do: nil
-  defp short_docs(docs) do
+  defp short_docs({_, nil}), do: nil
+  defp short_docs({_, docs}) do
     case Regex.run(%r/(.*)\n\n.+/, docs) do
     match: [_, docs]
       docs
     match: nil
       nil
-    end
-  end
-
-  defp get_task_docs(nil), do: "No documentation."
-  defp get_task_docs(docs) do
-    task = Enum.find(docs, fn(x) ->
-      case x do
-      match: {{:run, _}, _, _, _}
-        x
-      else:
-        nil
-      end
-    end)
-    case task do
-    match: nil
-      nil
-    match: {_, _, _, docs}
-      docs
     end
   end
 end

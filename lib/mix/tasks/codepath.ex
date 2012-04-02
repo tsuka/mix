@@ -1,6 +1,6 @@
 defmodule Mix.Tasks.Codepath do
   @behavior Mix.Task
-  @doc """
+  @moduledoc """
   Prints the current load path.
 
   If given the argument -p, prints the code
