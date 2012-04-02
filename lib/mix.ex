@@ -7,7 +7,7 @@ defmodule Mix do
     match: [h|t]
       Mix.Tasks.run_task h, t
     match: []
-      IO.puts "You have to give me a task to execute!"
+      Mix.Tasks.run_task "help"
     end
   end
 end

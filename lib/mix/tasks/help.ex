@@ -12,6 +12,7 @@ defmodule Mix.Tasks.Help do
     none: Print the short form documentation for all tasks.
   """
   def run([]) do
+    IO.puts "Available tasks:\n"
     modules = Mix.Tasks.list_tasks
     docs = lc module in modules do
       {module, short_docs(module.__info__(:moduledoc))}
