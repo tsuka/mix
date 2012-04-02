@@ -49,7 +49,11 @@ defmodule Mix.Tasks do
   def run_task(name, args // []) do
     case Mix.Tasks.get_module(name) do
     match: {:module, module}
-      module.run(args)
+      if is_task?(module) do
+        module.run(args)
+      else:
+        IO.puts "That task could not be found."
+      end
     match: {:error, _}
       IO.puts "That task could not be found."
     end
