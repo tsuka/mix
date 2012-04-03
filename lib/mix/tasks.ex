@@ -12,7 +12,8 @@ defmodule Mix.Tasks do
     Enum.reduce(:code.all_loaded, [], fn({module, _}, acc) ->
       proper = Regex.run(%r/Mix\.Tasks\..*/, atom_to_list(module))
       if proper && is_task?(module) do
-        acc ++ [module]
+        acc = [module|acc]
+        acc
       else:
         acc
       end
