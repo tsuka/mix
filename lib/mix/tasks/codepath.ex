@@ -1,8 +1,7 @@
 defmodule Mix.Tasks.Codepath do
   @behavior Mix.Task
+  @shortdoc "Prints the current load path."
   @moduledoc """
-  Prints the current load path.
-
   If given the argument -p, prints the code
   load path one path per line. Otherwise, prints
   the whole list in such a way that it can be

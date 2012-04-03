@@ -1,8 +1,7 @@
 defmodule Mix.Tasks.Hello do
   @behavior Mix.Task
+  @shortdoc "This is short documentation, see."
   @moduledoc """
-  This is short documentation, see.
-
   A test task.
   """
   def run(_) do

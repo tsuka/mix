@@ -1,8 +1,7 @@
 defmodule Mix.Tasks.Help do
   @behavior Mix.Task
+  @shortdoc "Print help information for tasks."
   @moduledoc """
-  Print help information for tasks.
-
   If given a task name, prints the documentation for that task.
   If no task name is given, prints the short form documentation
   for all tasks.
@@ -15,7 +14,7 @@ defmodule Mix.Tasks.Help do
     IO.puts "Available tasks:\n"
     modules = Mix.Tasks.list_tasks
     docs = lc module in modules do
-      {module, short_docs(module.__info__(:moduledoc))}
+      {module, module.__info__(:data)[:shortdoc]}
     end
     Enum.each(docs, fn({module, doc}) ->
       task = Mix.Tasks.module_to_task(module)
@@ -39,17 +38,6 @@ defmodule Mix.Tasks.Help do
       end
     match: {:error, _}
       IO.puts "No task by that name was found."
-    end
-  end
-
-  defp short_docs(nil), do: nil
-  defp short_docs({_, nil}), do: nil
-  defp short_docs({_, docs}) do
-    case Regex.run(%r/(.*)\n\n.+/, docs) do
-    match: [_, docs]
-      docs
-    match: nil
-      nil
     end
   end
 end
