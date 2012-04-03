@@ -18,7 +18,13 @@ defmodule Mix.Mixfile do
   def get_project() do
     case :code.ensure_loaded(Mix.Project) do
     match: {:module, _}
-      Keyword.merge Mix.Project.project, project_defaults 
+      Keyword.merge(project_defaults, Mix.Project.project, fn(_, x, y) ->
+        if is_list(x) && is_list(y) do
+          x ++ y
+        else:
+          y
+        end
+      end)
     else:
       nil
     end
