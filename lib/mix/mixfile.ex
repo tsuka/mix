@@ -33,6 +33,8 @@ defmodule Mix.Mixfile do
   defp project_defaults() do
     [compile_path: "exbin/",
      test_paths: ["test/"],
-     source_paths: ["lib/"]]
+     source_paths: ["lib/"],
+     compile_first: [],
+     target_path: "target/"]
   end
 end
