@@ -1,5 +1,5 @@
 defmodule Mix do
-  def start(args // Env.argv) do
+  def start(args // System.argv) do
     Mix.Mixfile.load()
     case args do
     match: [h]
