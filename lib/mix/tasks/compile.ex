@@ -35,6 +35,7 @@ defmodule Mix.Tasks.Compile do
     compile_path = project[:compile_path]
     compile_first = project[:compile_first]
     options = project[:compile_options]
+    :file.make_dir compile_path
     if !Enum.empty?(compile_first) do
       IO.puts "Performing initial compilation (compile_first)..."
       Enum.each(compile_first, compile_file(&1, compile_path, options))
