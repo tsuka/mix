@@ -39,23 +39,24 @@ defmodule Mix.External do
         match: {pid, :take}
           pid <- {Process.self, receive_data(port)}
           recur
-        match: {:put, data}
+      match: {:put, data}
           :erlang.port_command port, data
           recur
         match: {pid, :stream_to_out}
-          loop do
-          match:
-            case receive_data(port) do
-            match: :eof
-              :ok
-            match: data
-              IO.print data
-              recur
-            end
-          end
+          pid <- {Process.self, internal_stream_to_out(port)}
         end
       end
     end)
+  end
+
+  defp internal_stream_to_out(port) do
+    case receive_data(port) do
+    match: :eof
+      :eof
+    match: data
+      IO.print data
+      internal_stream_to_out(port)
+    end
   end
 
   defp receive_data(port) do
@@ -78,13 +79,10 @@ defmodule Mix.External do
   and then returns :ok.
   """
   def stream_to_out(proc) do
-    proc <- {Process.self, :take}
+    proc <- {Process.self, :stream_to_out}
     receive do
     match: {^proc, :eof}
       :ok
-    match: {^proc, data}
-      IO.print data
-      stream_to_out(proc)
     end
   end
 
