@@ -73,7 +73,7 @@ defmodule Mix.Tasks do
   and capitalizes each segment to form a module name.
   """
   def capitalize_task(s) do
-    Enum.join(Enum.map(Regex.split(%r/\./, s), capitalize(&1)), ".")
+    Enum.join(Enum.map(Regex.split(%r/\./, s), Mix.Utils.capitalize(&1)), ".")
   end
 
   @doc """
@@ -86,12 +86,6 @@ defmodule Mix.Tasks do
     Enum.find(module.module_info(:functions), fn({name, arity}) ->
       name == :run && arity == 1
     end)
-  end
-
-  defp capitalize(s) when is_list(s), do: capitalize list_to_binary(s)
-  defp capitalize(<<s>>), do: <<:string.to_upper(s)>>
-  defp capitalize(<<s, t|binary>>) do
-    <<:string.to_upper(s)>> <> t
   end
 
   defp to_lower(task) do

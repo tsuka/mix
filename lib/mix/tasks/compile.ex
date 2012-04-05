@@ -37,9 +37,10 @@ defmodule Mix.Tasks.Compile do
     options = project[:compile_options]
     :file.make_dir compile_path
     if !Enum.empty?(compile_first) do
-      IO.puts "Performing initial compilation (compile_first)..."
+      IO.puts "\nPerforming initial compilation (compile_first)...\n"
       Enum.each(compile_first, compile_file(&1, compile_path, options))
     end
+    IO.puts "\nCompiling source files...\n"
     Enum.each(project[:source_paths], fn(path) ->
       files = File.wildcard(File.join([path, "**/*.ex"]))
       Enum.each(files, fn(file) ->
@@ -48,10 +49,19 @@ defmodule Mix.Tasks.Compile do
         end
       end)
     end)
+    Mix.Utils.touch(compile_path)
   end
 
   defp compile_file(file, to, options) do
-    IO.puts Enum.join(["Compiling ", file, " to ", to, "..."])
-    Code.compile_file_to_dir(file, to, options)
+    if stale?(file, to) do
+      IO.puts Enum.join(["Compiling ", file, " to ", to, "..."])
+      Code.compile_file_to_dir(file, to, options)
+    end
+  end
+
+  defp stale?(file, to) do
+    file_modtime = File.file_info(file).mtime
+    to_modtime = File.file_info(to).mtime
+    file_modtime > to_modtime
   end
 end
