@@ -36,32 +36,37 @@ defmodule Mix.Tasks.Compile do
     compile_first = project[:compile_first]
     options = project[:compile_options]
     :file.make_dir compile_path
-    if !Enum.empty?(compile_first) do
-      IO.puts "\nPerforming initial compilation (compile_first)...\n"
-      Enum.each(compile_first, compile_file(&1, compile_path, options))
-    end
-    IO.puts "\nCompiling source files...\n"
-    Enum.each(project[:source_paths], fn(path) ->
-      files = File.wildcard(File.join([path, "**/*.ex"]))
-      Enum.each(files, fn(file) ->
-        if !Enum.find(project[:compile_first], fn(x) -> x == file end) do
-          compile_file(file, compile_path, options)
-        end
+    to_compile = extract_files(project[:source_paths])
+    if Enum.find(to_compile, stale?(&1, compile_path)) do
+      if !Enum.empty?(compile_first) do
+        IO.puts "\nPerforming initial compilation (compile_first)...\n"
+        Enum.each(compile_first, compile_file(&1, compile_path, options))
+        IO.puts "\nCompiling everything else...\n"
+      end
+      Enum.each(project[:source_paths], fn(path) ->
+        files = File.wildcard(File.join([path, "**/*.ex"]))
+        Enum.each(files, fn(file) ->
+          if !Enum.find(project[:compile_first], fn(x) -> x == file end) do
+            compile_file(file, compile_path, options)
+          end
+        end)
       end)
-    end)
+    end
     Mix.Utils.touch(compile_path)
   end
 
+  defp extract_files(paths) do
+    List.concat(lc path in paths, do: File.wildcard(File.join([path, "**/*.ex"])))
+  end
+
   defp compile_file(file, to, options) do
-    if stale?(file, to) do
-      IO.puts Enum.join(["Compiling ", file, " to ", to, "..."])
-      Code.compile_file_to_dir(file, to, options)
-    end
+    IO.puts Enum.join(["Compiling ", file, " to ", to, "..."])
+    Code.compile_file_to_dir(file, to, options)
   end
 
   defp stale?(file, to) do
-    file_modtime = File.file_info(file).mtime
-    to_modtime = File.file_info(to).mtime
-    file_modtime > to_modtime
+    {:ok, file_info} = File.read_info(file)
+    {:ok, to_info} = File.read_info(to)
+    file_info.mtime > to_info.mtime
   end
 end

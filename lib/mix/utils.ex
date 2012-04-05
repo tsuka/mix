@@ -13,7 +13,8 @@ defmodule Mix.Utils do
   to the current date and time.
   """
   def touch(file) do
-    info = File.file_info(file).update_mtime(fn(_) -> :calendar.local_time end)
+    {:ok, old_info} = File.read_info(file)
+    info = old_info.update_mtime(fn(_) -> :calendar.local_time end)
     :file.write_file_info(file, setelem(info, 1, :file_info))
   end
 end
