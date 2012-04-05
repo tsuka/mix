@@ -8,6 +8,10 @@ defmodule Mix.Utils do
     <<:string.to_upper(s)>> <> t
   end
 
+  @doc """
+  'touch' a file, updating it's modification time
+  to the current date and time.
+  """
   def touch(file) do
     info = File.file_info(file).update_mtime(fn(_) -> :calendar.local_time end)
     :file.write_file_info(file, setelem(info, 1, :file_info))
