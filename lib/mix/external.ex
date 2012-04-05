@@ -68,9 +68,23 @@ defmodule Mix.External do
     end
   end
 
-  defp cmd(name, args // []) do
+  defp cmd(name, args) when is_binary(name) do
+    cmd binary_to_list(name), args
+  end
+
+  defp cmd(name, args) do
     :erlang.open_port({:spawn_executable, :os.find_executable(name)},
-                      [:binary, {:args, args}, :eof, :stream, :in, :out])
+                      [:binary, {:args, map_to_list(args)}, :eof, :stream, :in, :out])
+  end
+
+  defp map_to_list(l) do
+    lc item in l do
+      if is_binary(item) do
+        binary_to_list item
+      else:
+        item
+      end
+    end
   end
 
   @doc """
