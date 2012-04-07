@@ -30,11 +30,21 @@ defmodule Mix.Mixfile do
     end
   end
 
+  def default_task(project) do
+    if project && project[:default] do
+      project[:default]
+    else:
+      "help"
+    end
+  end
+
   defp project_defaults() do
     [compile_path: "exbin/",
+     erlang_compile_path: "ebin/",
      test_paths: ["test/"],
      test_pattern: "*_test.exs",
      source_paths: ["lib/"],
+     erlang_source_paths: ["src/"],
      compile_first: [],
      target_path: "target/"]
   end
