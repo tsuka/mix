@@ -31,7 +31,8 @@ defmodule Mix.Tasks.Help do
     case Mix.Tasks.get_module(task) do
     match: {:module, module}
       docs = module.__info__(:moduledoc)
-      if docs do
+      case docs do
+      match: {_, docs}
         IO.puts docs
       else:
         IO.puts "There is no documentation for this task."
