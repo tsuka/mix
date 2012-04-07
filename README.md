@@ -101,7 +101,7 @@ should compile with docs enabled (necessary for `mix help` to work).
 
 There are a lot of configuration options you can set and any task is
 free to invent its own. Mix's configuration is simplistic and concise
-because Mix sane defaults for options that most every project will use.
+because Mix has sane defaults for options that most projects will use.
 Examples:
 
 * `:compile_path` = `"exbin/"`
