@@ -30,6 +30,12 @@ defmodule Mix.Mixfile do
     end
   end
 
+  @doc """
+  Takes a project. If this argument is `nil` or is a Keyword
+  that does not contain the `:default` key, returns "help".
+  Otherwise, returns the value at the `:default` key in the
+  project.
+  """
   def default_task(project) do
     if project && project[:default] do
       project[:default]
