@@ -104,7 +104,7 @@ free to invent its own. Mix's configuration is simplistic and concise
 because Mix has sane defaults for options that most projects will use.
 Examples:
 
-* `:compile_path` = `"exbin/"`
+* `:compile_path` = `"ebin/"`
 * `:source_paths` = `["lib/"]`
 * `:test_paths`   = `["test/"]`
 
@@ -118,7 +118,7 @@ Mix does a lot of things out of the box.
 ### Compilation
 
 Mix can handle your project's compilation for you. If you're a typical
-Elixir project that uses `lib/` for source files and `exbin/` for
+Elixir project that uses `lib/` for source files and `ebin/` for
 compiled beam files, you don't even have to provide any
 compilation-specific setup. Just throw a simple `Mix.Project` in your
 `mix.exs` (possibly with just `name` and `version`) and run `mix
@@ -145,7 +145,7 @@ information.
 
 ### iex
 
-Have you gotten sick of typing `iex -pa exbin/` yet? Yeah, so did I. You
+Have you gotten sick of typing `iex -pa ebin/` yet? Yeah, so did I. You
 can run `mix iex` and you'll instantly have an iex session with your
 `:compile_path` on the code path. More importantly, since Mix runs your
 `mix.exs` file at startup, anything you do there is available to this

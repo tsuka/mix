@@ -3,7 +3,7 @@ defmodule Mix.Tasks.Compile do
   @shortdoc "Compile Elixir source files."
   @moduledoc """
   A task to compile Elixir source files. By default,
-  output is compiled to `exdoc/`. Sourcefiles are assumed
+  output is compiled to `ebin/`. Sourcefiles are assumed
   to be in `lib/`. You can change this by setting `:source_paths`
   in your project. It is expected to be a list of paths like
   so:
@@ -14,9 +14,9 @@ defmodule Mix.Tasks.Compile do
   default one and the compile task will look for source files
   in both `lib/` and `src/`. Setting the compile path works similarly.
 
-  `[compile_path: "ebin"]`
+  `[compile_path: "exbin"]`
 
-  This sets the compile path to `ebin` so that source files will
+  This sets the compile path to `exbin` so that source files will
   be compiled to this directory instead of the default one.
 
   Sometimes files need to be compiled in a specific order. If you

@@ -45,7 +45,7 @@ defmodule Mix.Mixfile do
   end
 
   defp project_defaults() do
-    [compile_path: "exbin/",
+    [compile_path: "ebin/",
      erlang_compile_path: "ebin/",
      test_paths: ["test/"],
      test_pattern: "*_test.exs",
