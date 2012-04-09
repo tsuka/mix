@@ -1,5 +1,5 @@
 defmodule Mix.Tasks.Iex do
-  @behavior Mix.Task
+  use Mix.Task
   @shortdoc "Start iex with your project's settings."
   @moduledoc """
   Starts an iex repl with your project settings.

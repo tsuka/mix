@@ -1,5 +1,5 @@
 defmodule Mix.Tasks.Help do
-  @behavior Mix.Task
+  use Mix.Task
   @shortdoc "Print help information for tasks."
   @moduledoc """
   If given a task name, prints the documentation for that task.

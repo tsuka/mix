@@ -1,5 +1,5 @@
 defmodule Mix.Tasks.Compile do
-  @behavior Mix.Task
+  use Mix.Task
   @shortdoc "Compile Elixir source files."
   @moduledoc """
   A task to compile Elixir source files. By default,

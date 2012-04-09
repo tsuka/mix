@@ -1,5 +1,5 @@
 defmodule Mix.Tasks.Test do
-  @behavior Mix.Task
+  use Mix.Task
   @shortdoc "Run a project's tests."
   @moduledoc """
   Run the tests for a project. This will have the effect

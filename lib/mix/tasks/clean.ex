@@ -1,5 +1,5 @@
 defmodule Mix.Tasks.Clean do
-  @behavior Mix.Task
+  use Mix.Task
   @shortdoc "Delete compile path and target."
   @moduledoc """
   Deletes the files in compile path and target path.
