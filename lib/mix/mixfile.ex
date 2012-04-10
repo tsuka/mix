@@ -10,6 +10,12 @@ defmodule Mix.Mixfile do
     if :filelib.is_file("mix.exs") do
       Code.require_file("mix")
     end
+    case get_project do
+    match: nil
+      nil
+    match: project
+      add_local_code project
+    end
   end
 
   @doc """
@@ -42,6 +48,11 @@ defmodule Mix.Mixfile do
     else:
       "help"
     end
+  end
+
+  defp add_local_code(project) do
+    Code.append_path(project[:compile_path])
+    Code.append_path(project[:erlang_compile_path])
   end
 
   defp project_defaults() do

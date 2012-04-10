@@ -8,10 +8,7 @@ defmodule Mix.Tasks.Iex do
   Will compile first.
   """
   def run(_) do
-    project = Mix.Mixfile.get_project
     Mix.Tasks.run_task "compile"
-    Code.append_path(project[:compile_path])
-    Code.append_path(project[:erlang_compile_path])
     Elixir.IEx.start
     :timer.sleep(:infinity)
   end
